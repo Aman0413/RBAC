@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import dbConnect from "./config/dbConnect";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
+import adminRoutes from "./routes/adminRoutes";
 import cors from "cors";
 
 dotenv.config();
@@ -34,3 +35,4 @@ app.use(
 
 app.use("/api/auth/v1", authRoutes);
 app.use("/api/user/v1", userRoutes);
+app.use("/api/admin/v1", adminRoutes);

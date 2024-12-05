@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "manager", "admin"],
       default: "user",
     },
+    superuser: { type: Boolean, default: false },
   },
   {
     timestamps: true,
