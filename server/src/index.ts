@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import dbConnect from "./config/dbConnect";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
+import cors from "cors";
 
 dotenv.config();
 
@@ -24,6 +25,12 @@ app.get("/", (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+  })
+);
 
 app.use("/api/auth/v1", authRoutes);
 app.use("/api/user/v1", userRoutes);

@@ -37,4 +37,14 @@ router.get(
   }
 );
 
+router.get("/getmyprofile", verifyToken, (req: Request, res: Response) => {
+  try {
+    //@ts-ignore
+    const user = req.user;
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 export default router;
