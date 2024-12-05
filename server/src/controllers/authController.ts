@@ -3,6 +3,7 @@ import userModel from "../models/userModel";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+let token;
 // register controller
 const register = async (req: Request, res: Response) => {
   try {
@@ -76,7 +77,7 @@ const login = async (req: Request, res: Response) => {
     }
 
     // create a token
-    const token = jwt.sign(
+    token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET as string,
       {
@@ -90,4 +91,22 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-export { register, login };
+const logout = async (req: Request, res: Response) => {
+  try {
+    token = null;
+    //@ts-ignore
+    req.user = null;
+
+    console.log({
+      token,
+      //@ts-ignore
+      user: req.user,
+    });
+    return res
+      .status(200)
+      .json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+export { register, login, logout };
