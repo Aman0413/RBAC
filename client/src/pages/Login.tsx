@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { UserDataContext } from '@/context/UserContext'
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 
@@ -10,6 +11,7 @@ interface LoginProps {
   password: string
 }
 function Login() {
+  const { setUser } = useContext(UserDataContext);
 
   const [loginData, setLoginData] = useState<LoginProps>({
     email: '',
@@ -20,14 +22,15 @@ function Login() {
     if (loginData.email === '' || loginData.password === '') {
       toast.error('Please fill all the fields')
     }
-
     try {
       const res = await axios.post('http://localhost:4000/api/auth/v1/login', loginData, {
         withCredentials: true
       })
       console.log(res.data);
       if (res.data.success) {
+        setUser(res.data.user)
         toast.success('Login success')
+
       }
       // Save token to local storage
       localStorage.setItem('token', res.data.token)

@@ -2,6 +2,8 @@ import express from "express";
 import { Request, Response } from "express";
 import verifyToken from "../middlewares/authMiddleware";
 import authorizeRoles from "../middlewares/roleMiddleware";
+import { getMyProfile } from "../controllers/userControllers";
+
 const router = express.Router();
 
 // only admin can access this route
@@ -37,14 +39,7 @@ router.get(
   }
 );
 
-router.get("/getmyprofile", verifyToken, (req: Request, res: Response) => {
-  try {
-    //@ts-ignore
-    const user = req.user;
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+//@ts-ignore
+router.get("/getmyprofile", verifyToken, getMyProfile);
 
 export default router;

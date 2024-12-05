@@ -59,3 +59,4 @@ jest/
 # Lock files for VS Code
 .vscode/.*
 .history/
+.vercel

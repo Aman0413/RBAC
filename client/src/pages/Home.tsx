@@ -1,10 +1,12 @@
 import { Button } from '@/components/ui/button'
+import { UserDataContext } from '@/context/UserContext';
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+
 
 function Home() {
-  const [user, setUser] = useState(null)
+  const { user, setUser } = useContext(UserDataContext);
+
 
   const getUser = async () => {
     try {
@@ -15,7 +17,7 @@ function Home() {
       })
       console.log("USER", res.data);
       if (res.data.success) {
-        setUser(res.data)
+        setUser(res.data.user)
       }
 
     } catch (error) {
