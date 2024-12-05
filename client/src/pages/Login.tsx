@@ -31,6 +31,9 @@ function Login() {
       }
       // Save token to local storage
       localStorage.setItem('token', res.data.token)
+      // Redirect to home page
+      window.location.href = '/'
+
     } catch (error) {
 
       console.log(error);

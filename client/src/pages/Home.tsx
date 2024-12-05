@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 
 function Home() {
+  const [user, setUser] = useState(null)
+
+  
+
   return (
-    <div>Home</div>
+    <div>Home Page</div>
   )
 }
 
