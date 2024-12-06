@@ -1,3 +1,5 @@
+import { Request, Response } from "express";
+import Task from "../models/taskModel";
 import User from "../models/userModel";
 
 // modify user to make admin or remove admin and also make user manager
@@ -38,4 +40,120 @@ const makeAdmin = async (req: Request, res: Response) => {
   }
 };
 
-export { makeAdmin };
+// add task
+const addTask = async (req: Request, res: Response) => {
+  try {
+    //@ts-ignore
+    const { title, description, assignedTo } = req.body;
+
+    // create task
+    const task = new Task({
+      title,
+      description,
+      assignedTo,
+      //@ts-ignore
+      createdBy: req.user.id,
+    });
+
+    await task.save();
+    //@ts-ignore
+    return res.status(200).json({ success: true, message: "Task created" });
+  } catch (error) {
+    //@ts-ignore
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// remove task
+const removeTask = async (req: Request, res: Response) => {
+  try {
+    //@ts-ignore
+    const { taskId } = req.body;
+    // find task by id
+    const task = await Task.findByIdAndDelete(taskId);
+    //@ts-ignore
+    if (!task) return res.status(400).json({ message: "Task not found" });
+
+    if (task) {
+      //@ts-ignore
+      return res.status(200).json({ success: true, message: "Task deleted" });
+    }
+  } catch (error) {
+    //@ts-ignore
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// update task status
+const updateTask = async (req: Request, res: Response) => {
+  try {
+    let { taskId, status } = req.body;
+    status = status.trim();
+
+    //checking status should be approved or rejected
+    if (status !== "Approved" && status !== "Rejected") {
+      return res.status(400).json({
+        success: true,
+        message: "Invalid status, status should be Approved or Rejected",
+      });
+    }
+
+    // find task by id
+    const task = await Task.findById(taskId);
+    if (!task) {
+      return res.status(400).json({ success: true, message: "Task not found" });
+    }
+    if (status !== "Completed") {
+      return res
+        .status(400)
+        .json({ success: true, message: "Task is not completed yet" });
+    }
+
+    if (task.status === "Completed") {
+      return res.status(400).json({ success: true, message: `Task ${status}` });
+    }
+  } catch (error) {
+    //@ts-ignore
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// show all tasks which assigned by current admin
+const showAllTasks = async (req: Request, res: Response) => {
+  try {
+    //@ts-ignore
+    const tasks = await Task.find({ createdBy: req.user.id });
+    //@ts-ignore
+    return res.status(200).json({ success: true, tasks });
+  } catch (error) {
+    //@ts-ignore
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    // fetch all those user who are not superuser and not current user and not admin
+    const users = await User.find({
+      superuser: false,
+      role: { $nin: ["admin", "superuser"] },
+      //@ts-ignore
+      _id: { $ne: req.user.id },
+    });
+
+    if (!users) {
+      return res.status(400).json({ message: "No users found" });
+    }
+    return res.status(200).json({ success: true, users });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+export {
+  makeAdmin,
+  addTask,
+  removeTask,
+  updateTask,
+  showAllTasks,
+  getAllUsers,
+};

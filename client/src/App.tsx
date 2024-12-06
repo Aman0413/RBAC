@@ -5,6 +5,7 @@ import Login from "./pages/Login"
 import { Toaster } from "react-hot-toast"
 import ProtectedRoute from "./utils/ProtectedRoute"
 import NotLogin from "./utils/NotLogin"
+import Navbar from "./components/Navbar"
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
       />
 
 
+      <Navbar />
       <Routes >
         <Route element={<NotLogin />}>
           <Route path="/register" element={<Register />} />
