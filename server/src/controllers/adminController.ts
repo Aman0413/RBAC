@@ -56,6 +56,7 @@ const addTask = async (req: Request, res: Response) => {
   try {
     //@ts-ignore
     const { title, description, assignedTo } = req.body;
+    
     if (!title || !description || !assignedTo) {
       return res.status(400).json({ message: "Please fill all fields" });
     }

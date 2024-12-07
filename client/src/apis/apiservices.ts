@@ -79,7 +79,6 @@ export const deleteUserAdmin = async (token: string, id: string) => {
 };
 
 // change user role
-
 export const changeRole = async (token: string, userId: string) => {
   try {
     const res = await axios.post(
@@ -94,5 +93,33 @@ export const changeRole = async (token: string, userId: string) => {
     return res.data;
   } catch (error) {
     console.error("Error changing user role:", error);
+  }
+};
+
+// approve or reject task
+export const approveTask = async (
+  token: string,
+  title: string,
+  description: string,
+  assignedTo: string
+) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/admin/v1/addtask`,
+      {
+        title,
+        description,
+        assignedTo,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error approving task:", error);
+    throw error;
   }
 };

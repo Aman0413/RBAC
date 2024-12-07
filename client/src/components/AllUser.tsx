@@ -1,10 +1,12 @@
-import { changeRole, deleteUserAdmin, getAllUsers } from '@/apis/apiservices';
+
 import Delete from '@/icons/Delete';
 import Edit from '@/icons/Edit';
 import User from '@/icons/User';
 import { useEffect, useState } from 'react'
 import Modal from './Modal';
 import toast from 'react-hot-toast';
+import Plus from '@/icons/Plus';
+import ChangeStatusModal from './ChangeStatusModal';
 
 
 function AllUser({ name,
@@ -14,7 +16,7 @@ function AllUser({ name,
     edit,
     delete: deleteUser,
     isModalOpen,
-    onClose, option, operation, handleRoleChange, deleteOperation }: {
+    onClose, option, operation, handleRoleChange, deleteOperation, addTask }: {
         name: string;
         role: string;
         id: string;
@@ -27,11 +29,14 @@ function AllUser({ name,
         operation: () => void;
         handleRoleChange: (userId: string) => void;
         deleteOperation: (id: string) => void;
-
+        addTask: () => string;
     }) {
 
+    const [isChangeStatusModalOpen, setChangeStatusModalOpen] = useState(false);
 
-
+    const toggleChangeStatusModal = () => {
+        setChangeStatusModalOpen(!isChangeStatusModalOpen);
+    };
 
     return (
         <div>
@@ -45,11 +50,14 @@ function AllUser({ name,
                 confirmText={option === 'edit' ? 'Save' : 'Delete'}
                 cancelText="Cancel"
                 operation={option === 'edit' ? handleRoleChange : deleteOperation}
-
-
-
             />
 
+            <ChangeStatusModal
+                isOpen={isChangeStatusModalOpen}
+                onCancel={toggleChangeStatusModal}
+                addTask={addTask}
+
+            />
             <div className="p-6 overflow-scroll px-0">
                 <table className="mt-4 w-full min-w-max table-auto text-left">
                     <thead>
@@ -100,6 +108,11 @@ function AllUser({ name,
                                     <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 flex space-x-5 justify-center items-center">
                                         <span className='bg-blue-500/20 text-blue-600 p-2 rounded-xl' onClick={edit}>
                                             <Edit
+                                            />
+                                        </span>
+                                        <span className='bg-blue-500/20 text-blue-600 p-2 rounded-xl' onClick={toggleChangeStatusModal}>
+                                            <Plus
+
                                             />
                                         </span>
                                         <span className='bg-red-500/20 text-red-600 p-2 rounded-xl' onClick={deleteUser}>
