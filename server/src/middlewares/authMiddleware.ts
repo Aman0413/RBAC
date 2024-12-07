@@ -4,7 +4,8 @@ import { Request, Response, NextFunction } from "express";
 const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
   let token;
   let authHeader =
-    req.headers.authorization || (req.headers.Authorization as string);
+    (req.headers.authorization as string) ||
+    (req.headers.Authorization as string);
 
   // check if token header is provided
   if (!authHeader || authHeader === undefined) {

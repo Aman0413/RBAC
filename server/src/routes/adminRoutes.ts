@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addTask,
+  deleteUser,
   getAllUsers,
   makeAdmin,
   removeTask,
@@ -23,5 +24,13 @@ router.post("/updatetask", verifyToken, authorizeRoles("admin"), updateTask);
 router.get("/alltasks", verifyToken, authorizeRoles("admin"), showAllTasks);
 //@ts-ignore
 router.get("/allusers", verifyToken, authorizeRoles("admin"), getAllUsers);
+//@ts-ignore
+router.delete(
+  `/deleteuser/:userId`,
+  verifyToken,
+  //@ts-ignore
+  authorizeRoles("admin"),
+  deleteUser
+);
 
 export default router;

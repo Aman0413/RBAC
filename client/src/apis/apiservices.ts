@@ -62,3 +62,37 @@ export const getAllTasks = async (token: string) => {
     throw error;
   }
 };
+
+// delete user
+export const deleteUserAdmin = async (token: string, id: string) => {
+  try {
+    const res = await axios.delete(`${API_URL}/admin/v1/deleteuser/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw error;
+  }
+};
+
+// change user role
+
+export const changeRole = async (token: string, userId: string) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/admin/v1/makeadmin`,
+      { userId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error changing user role:", error);
+  }
+};

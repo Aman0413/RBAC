@@ -1,4 +1,4 @@
-import { getAllTasks, getAllUsers, getUserProfile, logoutUser } from '@/apis/apiservices';
+import { changeRole, deleteUserAdmin, getAllTasks, getAllUsers, getUserProfile, logoutUser } from '@/apis/apiservices';
 import AddTask from '@/components/AddTask';
 import AllUser from '@/components/AllUser';
 import GetAllTask from '@/components/GetAllTask';
@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { UserDataContext } from '@/context/UserContext';
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
+import toast from 'react-hot-toast';
 
 
 function Home() {
@@ -28,7 +29,35 @@ function Home() {
     setIsModalOpen(false);
     setSelectedUser(null);
   };
- 
+  const handleRoleChange = async (userId: string) => {
+    try {
+      console.log(localStorage.getItem('token'));
+      const res = await changeRole(localStorage.getItem('token') as string, userId);
+      console.log("role change", res);
+      if (res.success) {
+        toast.success(res.message);
+        getAllUserFunc();
+
+      }
+    } catch (error) {
+      console.log('Error changing role:', error);
+    }
+  }
+
+  const deleteOperation = async (id: string) => {
+    try {
+      const res = await deleteUserAdmin(localStorage.getItem('token') as string, id);
+
+      if (res.success) {
+        toast.success(res.message);
+        getAllUserFunc();
+
+      }
+    } catch (error) {
+      console.log('Error deleting user:', error);
+    }
+  }
+
 
   const getUser = async () => {
     try {
@@ -128,6 +157,12 @@ function Home() {
                   isModalOpen={isModalOpen}
                   onClose={handleCloseModal}
                   option={modalType}
+                  handleRoleChange={() => {
+                    handleRoleChange(user._id)
+                  }}
+                  deleteOperation={() => {
+                    deleteOperation(user._id)
+                  }}
 
                 />
               })

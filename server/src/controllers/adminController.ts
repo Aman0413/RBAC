@@ -7,22 +7,31 @@ const makeAdmin = async (req: Request, res: Response) => {
   try {
     //@ts-ignore
     const { userId } = req.body;
+    console.log("userId", userId);
     //@ts-ignore
     if (req.user.id == userId) {
       //@ts-ignore
-      return res.status(400).json({ message: "Cannot modify own role" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Cannot modify own role" });
     }
     //@ts-ignore
-    if (!userId) return res.status(400).json({ message: "Invalid user" });
+    if (!userId)
+      return res.status(400).json({ success: false, message: "Invalid user" });
 
     // find user by id
     const user = await User.findById(userId);
     //@ts-ignore
-    if (!user) return res.status(400).json({ message: "User not found" });
+    if (!user)
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found" });
 
     if (user.superuser === true) {
       //@ts-ignore
-      return res.status(400).json({ message: "Cannot modify superuser" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Cannot modify superuser" });
     }
 
     if (user.role === "admin") {
@@ -36,7 +45,9 @@ const makeAdmin = async (req: Request, res: Response) => {
     return res.status(200).json({ success: true, user });
   } catch (error) {
     //@ts-ignore
-    return res.status(500).json({ message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -154,6 +165,30 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+// delete user
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    if (!userId) {
+      return res.status(400).json({ message: "Invalid user" });
+    }
+
+    //@ts-ignore
+    if (req.user.id == userId) {
+      return res.status(400).json({ message: "Cannot delete own account" });
+    }
+
+    // find user by id
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    return res.status(200).json({ success: true, message: "User deleted" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export {
   makeAdmin,
   addTask,
@@ -161,4 +196,5 @@ export {
   updateTask,
   showAllTasks,
   getAllUsers,
+  deleteUser,
 };

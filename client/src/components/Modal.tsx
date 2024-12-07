@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Dialog,
     DialogContent,
@@ -6,8 +6,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { changeRole } from "@/apis/apiservices";
+import toast from "react-hot-toast";
+
 
 interface ModalProps {
+    userId: string;
     isOpen: boolean;
     title: string;
     description: string;
@@ -15,10 +19,13 @@ interface ModalProps {
     onCancel: () => void;
     confirmText?: string;
     cancelText?: string;
-    operation: () => void
+    operation: () => void | Promise<void>;
+
+
 }
 
 const Modal: React.FC<ModalProps> = ({
+    userId,
     isOpen,
     title,
     description,
@@ -28,12 +35,23 @@ const Modal: React.FC<ModalProps> = ({
     cancelText = "Cancel",
     operation
 }) => {
+
+
+
     return (
         <Dialog open={isOpen} onOpenChange={onCancel}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>{description}</DialogDescription>
+                    <DialogDescription>{description}
+
+                        <div className="w-full my-4">
+                            <div className="flex flex-col justify-center space-y-1 my-2">
+                                <span>Aman Verma</span>
+                                <span>Current Role:</span>
+                            </div>
+                        </div>
+                    </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-end gap-4 mt-4">
                     <button

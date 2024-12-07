@@ -1,9 +1,10 @@
-import { getAllUsers } from '@/apis/apiservices';
+import { changeRole, deleteUserAdmin, getAllUsers } from '@/apis/apiservices';
 import Delete from '@/icons/Delete';
 import Edit from '@/icons/Edit';
 import User from '@/icons/User';
 import { useEffect, useState } from 'react'
 import Modal from './Modal';
+import toast from 'react-hot-toast';
 
 
 function AllUser({ name,
@@ -13,7 +14,7 @@ function AllUser({ name,
     edit,
     delete: deleteUser,
     isModalOpen,
-    onClose, option, operation }: {
+    onClose, option, operation, handleRoleChange, deleteOperation }: {
         name: string;
         role: string;
         id: string;
@@ -24,27 +25,29 @@ function AllUser({ name,
         onClose: () => void;
         option: string | null;
         operation: () => void;
+        handleRoleChange: (userId: string) => void;
+        deleteOperation: (id: string) => void;
 
     }) {
-    const editOperation = () => {
-        console.log('Edit operation');
-    }
-    const deleteOperation = () => {
-        console.log('Delete operation');
-    }
+
+
 
 
     return (
         <div>
             <Modal
+                userId={id}
                 isOpen={isModalOpen}
                 title={option == 'edit' ? 'Edit User' : 'Delete User'}
                 description={option == 'edit' ? 'Edit user details.' : 'Are you sure you want to delete this user?'}
                 onConfirm={option === 'edit' ? edit : deleteUser}
                 onCancel={onClose}
-                confirmText={option === 'edit' ? 'Edit' : 'Delete'}
+                confirmText={option === 'edit' ? 'Save' : 'Delete'}
                 cancelText="Cancel"
-                operation={option === 'edit' ? editOperation : deleteOperation}
+                operation={option === 'edit' ? handleRoleChange : deleteOperation}
+
+
+
             />
 
             <div className="p-6 overflow-scroll px-0">
