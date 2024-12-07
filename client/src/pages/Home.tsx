@@ -1,4 +1,5 @@
-import { getAllUsers, getUserProfile, logoutUser } from '@/apis/apiservices';
+import { getAllTasks, getAllUsers, getUserProfile, logoutUser } from '@/apis/apiservices';
+import AddTask from '@/components/AddTask';
 import AllUser from '@/components/AllUser';
 import GetAllTask from '@/components/GetAllTask';
 import { Button } from '@/components/ui/button'
@@ -9,9 +10,25 @@ import React, { useContext, useEffect, useState } from 'react'
 
 function Home() {
   const { user, setUser } = useContext(UserDataContext);
+  const [tasks, setTasks] = useState([]);
   const [allusers, setAllUsers] = useState([]);
-  console.log("USER", user);
 
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'edit' | 'delete'>('edit'); // Track modal type
+  const [selectedUser, setSelectedUser] = useState(null); // Track the user being edited/deleted
+
+  const handleOpenModal = (type: 'edit' | 'delete', user: any) => {
+    setModalType(type);
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedUser(null);
+  };
+ 
 
   const getUser = async () => {
     try {
@@ -45,10 +62,22 @@ function Home() {
     }
   }
 
+  const getTasks = async () => {
+    try {
+      const res = await getAllTasks(localStorage.getItem('token') as string);
+      console.log("TAKS", res.tasks);
+      if (res.success) {
+        setTasks(res.tasks)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     getUser();
     getAllUserFunc();
+    getTasks()
   }, [])
 
 
@@ -62,27 +91,50 @@ function Home() {
 
       <div className='flex flex-col  space-x-4 w-full space-y-6'>
         <div className='bg-red-100 w-full rounded-2xl p-3 shadow-sm '>
-          <h3 className='my-3 text-gray-500'>All Users</h3>
 
-          <div className='flex flex-col justify-center items-center space-y-4'>
+          <div className='mt-5 bg-white p-4 rounded-md font-bold'>
+
+
+            <h2>Tasks</h2>
+            {
+              tasks && tasks.map((task: any, index: number) => {
+                return <GetAllTask
+                  key={index}
+                  task={task.title}
+                  assignedTo={task.assignedTo?.name}
+                  status={task.status}
+                  email={task.email}
+                  date={task.createdAt}
+                />
+              })
+            }
+          </div >
+          <div className='mt-5 bg-white p-4 rounded-md font-bold'>
+
+
+            <h2>All Users</h2>
+
             {
               allusers && allusers.map((user: any, index: number) => {
                 return <AllUser
+
                   key={index}
                   name={user.name}
                   role={user.role}
                   id={user._id}
                   email={user.email}
+                  edit={() => handleOpenModal('edit', user)}
+                  delete={() => handleOpenModal('delete', user)}
+                  isModalOpen={isModalOpen}
+                  onClose={handleCloseModal}
+                  option={modalType}
+
                 />
               })
             }
-          </div>
-
-          <div className='mt-5 bg-white p-4 rounded-md font-bold'>
-
-            <h2>Tasks</h2>
-            <GetAllTask />
           </div >
+
+
 
         </div>
 

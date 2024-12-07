@@ -46,3 +46,19 @@ export const getAllUsers = async (token: string) => {
     throw error;
   }
 };
+
+// get all tasks
+export const getAllTasks = async (token: string) => {
+  try {
+    const res = await axios.get(`${API_URL}/admin/v1/alltasks`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching all tasks:", error);
+    throw error;
+  }
+};

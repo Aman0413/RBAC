@@ -126,7 +126,7 @@ const showAllTasks = async (req: Request, res: Response) => {
   try {
     //@ts-ignore
     const tasks = await Task.find({ createdBy: req.user.id }).populate(
-      "createdBy"
+      "assignedTo"
     );
     //@ts-ignore
     return res.status(200).json({ success: true, tasks });
