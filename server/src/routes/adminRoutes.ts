@@ -20,7 +20,7 @@ router.post("/removetask", verifyToken, authorizeRoles("admin"), removeTask);
 //@ts-ignore
 router.post("/updatetask", verifyToken, authorizeRoles("admin"), updateTask);
 //@ts-ignore
-router.get("/getalltasks", verifyToken, authorizeRoles("admin"), showAllTasks);
+router.get("/alltasks", verifyToken, authorizeRoles("admin"), showAllTasks);
 //@ts-ignore
 router.get("/allusers", verifyToken, authorizeRoles("admin"), getAllUsers);
 

@@ -1,12 +1,15 @@
-import { getUserProfile, logoutUser, getAllUsers } from '@/apis/apiservices';
+import { getAllUsers, getUserProfile, logoutUser } from '@/apis/apiservices';
+import AllUser from '@/components/AllUser';
+import GetAllTask from '@/components/GetAllTask';
 import { Button } from '@/components/ui/button'
 import { UserDataContext } from '@/context/UserContext';
 import axios from 'axios'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 
 function Home() {
   const { user, setUser } = useContext(UserDataContext);
+  const [allusers, setAllUsers] = useState([]);
   console.log("USER", user);
 
 
@@ -35,13 +38,12 @@ function Home() {
   const getAllUserFunc = async () => {
     try {
       const res = await getAllUsers(localStorage.getItem('token') as string);
-      console.log("ALL USERS", res);
+      setAllUsers(res.users)
 
     } catch (error) {
       console.log(error);
     }
   }
-
 
 
   useEffect(() => {
@@ -57,21 +59,33 @@ function Home() {
         Logout
       </Button>
 
-      <div className='flex justify-center space-x-4'>
-        <div className='bg-red-100 w-1/3 rounded-2xl p-3 shadow-sm'>
-          <h3>All Users</h3>
 
+      <div className='flex flex-col  space-x-4 w-full space-y-6'>
+        <div className='bg-red-100 w-full rounded-2xl p-3 shadow-sm '>
+          <h3 className='my-3 text-gray-500'>All Users</h3>
+
+          <div className='flex flex-col justify-center items-center space-y-4'>
+            {
+              allusers && allusers.map((user: any, index: number) => {
+                return <AllUser
+                  key={index}
+                  name={user.name}
+                  role={user.role}
+                  id={user._id}
+                  email={user.email}
+                />
+              })
+            }
+          </div>
+
+          <div className='mt-5 bg-white p-4 rounded-md font-bold'>
+
+            <h2>Tasks</h2>
+            <GetAllTask />
+          </div >
 
         </div>
-        <div className='bg-red-100 w-1/3 rounded-2xl p-3 shadow-sm' >
-          aman
-        </div>
-        <div className='bg-yellow-50 w-1/3 rounded-2xl p-3 shadow-sm'>
-          <h1>Home</h1>
-          <h1>{user && user.name}</h1>
-          <h1>{user && user.email}</h1>
-          <h1>{user && user.role}</h1>
-        </div>
+
       </div>
     </div>
   )

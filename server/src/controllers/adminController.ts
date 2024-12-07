@@ -45,6 +45,9 @@ const addTask = async (req: Request, res: Response) => {
   try {
     //@ts-ignore
     const { title, description, assignedTo } = req.body;
+    if (!title || !description || !assignedTo) {
+      return res.status(400).json({ message: "Please fill all fields" });
+    }
 
     // create task
     const task = new Task({
@@ -122,7 +125,9 @@ const updateTask = async (req: Request, res: Response) => {
 const showAllTasks = async (req: Request, res: Response) => {
   try {
     //@ts-ignore
-    const tasks = await Task.find({ createdBy: req.user.id });
+    const tasks = await Task.find({ createdBy: req.user.id }).populate(
+      "createdBy"
+    );
     //@ts-ignore
     return res.status(200).json({ success: true, tasks });
   } catch (error) {
@@ -131,12 +136,11 @@ const showAllTasks = async (req: Request, res: Response) => {
   }
 };
 
+// fetch all users
 const getAllUsers = async (req: Request, res: Response) => {
   try {
-    // fetch all those user who are not superuser and not current user and not admin
     const users = await User.find({
       superuser: false,
-      role: { $nin: ["admin", "superuser"] },
       //@ts-ignore
       _id: { $ne: req.user.id },
     });
@@ -149,6 +153,7 @@ const getAllUsers = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
 export {
   makeAdmin,
   addTask,
