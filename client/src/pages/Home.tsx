@@ -17,9 +17,9 @@ function Home() {
 
 
   const [loading, setLoading] = useState(false);
-  const [tasks, setTasks] = useState([]);
-  const [userTasks, setUserTasks] = useState([]);
-  const [allusers, setAllUsers] = useState([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [userTasks, setUserTasks] = useState<Task[]>([]);
+  const [allusers, setAllUsers] = useState<User[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'edit' | 'delete'>('edit'); // Track modal type
 
@@ -202,8 +202,8 @@ function Home() {
                     <GetAllTask
                       key={task._id}
                       task={task.title}
-                      //@ts-nocheck
-                      assignedTo={task.assignedTo?.name}
+                      //@ts-expect-error
+                      assignedTo={task.assignedTo.name}
                       status={task.status}
                       // email={task.email}
                       date={task.createdAt?.toString()}
@@ -246,7 +246,7 @@ function Home() {
             {
               userTasks && userTasks.map((task: Task, index: number) => (
                 <TaskCard key={index} taskid={task._id} title={task.title} description=
-                  //@ts-nocheck
+                  //@ts-expect-error
                   {task.description} status={task.status} />
               ))
             }
