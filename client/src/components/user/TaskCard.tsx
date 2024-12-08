@@ -7,8 +7,11 @@ import Loader from '@/utils/Loader';
 import { useState } from 'react';
 
 
-type taskStatus = "Pending" | "Completed" | "Approved" | "Rejected";
-const taskStatus = {
+type TaskStatusType = "Pending" | "Completed" | "Approved" | "Rejected";
+// Renamed type to TaskStatusType
+
+
+const taskStatusColors = {
     Pending: "bg-green-500/20 text-green-600",
     Completed: "bg-blue-500/20 text-blue-600",
     Approved: "bg-green-500/20 text-green-600",
@@ -19,7 +22,7 @@ interface TaskCardProps {
     taskid: string;
     title: string;
     description: string;
-    status: taskStatus
+    status: TaskStatusType;  // Using the renamed type here
 }
 function TaskCard({ taskid, title, description, status }: TaskCardProps) {
     const [loading, setLoading] = useState(false);
@@ -45,7 +48,7 @@ function TaskCard({ taskid, title, description, status }: TaskCardProps) {
                 <p className='text-gray-500'>{description}</p>
                 <div className='flex justify-between space-x-16'>
 
-                    <div className={`relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none ${taskStatus[status]
+                    <div className={`relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none ${taskStatusColors[status]
                         } py-1 px-2 text-xs rounded-md`} style={{ opacity: 1 }}>
                         <span className="">{status}</span>
                     </div>

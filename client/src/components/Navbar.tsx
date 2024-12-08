@@ -7,7 +7,7 @@ import { useContext } from 'react';
 
 
 function Navbar() {
-    const { user } = useContext(UserDataContext);
+    const { user } = useContext(UserDataContext) || { user: null };
 
     return (
         <div className=' p-4 shadow-md flex justify-between'>

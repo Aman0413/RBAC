@@ -12,7 +12,7 @@ import { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 function Home() {
-  const { user, setUser } = useContext(UserDataContext);
+  const { user, setUser } = useContext(UserDataContext) || { user: null };
   const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [userTasks, setUserTasks] = useState([]);
