@@ -12,15 +12,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "noEmitOnError": false,  // Allows the build to complete even if there are type errors
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./build",
-    "target": "es6",
-    "module": "esnext",
-    "moduleResolution": "node"
+    }
+    
   }
 }
