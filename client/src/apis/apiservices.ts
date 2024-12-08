@@ -96,8 +96,8 @@ export const changeRole = async (token: string, userId: string) => {
   }
 };
 
-// approve or reject task
-export const approveTask = async (
+// assign task to user
+export const assignTask = async (
   token: string,
   title: string,
   description: string,
@@ -120,6 +120,69 @@ export const approveTask = async (
     return res.data;
   } catch (error) {
     console.error("Error approving task:", error);
+    throw error;
+  }
+};
+
+// approve or reject task
+
+export const approveTask = async (
+  token: string,
+  taskId: string,
+  status: string
+) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/admin/v1/updatetask`,
+      {
+        taskId,
+        status,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error approving or rejecting task:", error);
+    throw error;
+  }
+};
+
+// mark task as completed
+export const markCompleted = async (token: string, taskId: string) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/user/v1/marktaskascompleted`,
+      {
+        taskId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return res.data;
+  } catch (error) {
+    console.error("Error marking task as completed:", error);
+  }
+};
+
+// get all tasks
+export const fetchAllTasksFunc = async (token: string) => {
+  try {
+    const res = await axios.get(`${API_URL}/user/v1/alltasks`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
     throw error;
   }
 };

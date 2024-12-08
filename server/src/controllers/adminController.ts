@@ -56,7 +56,7 @@ const addTask = async (req: Request, res: Response) => {
   try {
     //@ts-ignore
     const { title, description, assignedTo } = req.body;
-    
+
     if (!title || !description || !assignedTo) {
       return res.status(400).json({ message: "Please fill all fields" });
     }
@@ -103,12 +103,20 @@ const removeTask = async (req: Request, res: Response) => {
 const updateTask = async (req: Request, res: Response) => {
   try {
     let { taskId, status } = req.body;
+    console.log({
+      taskId,
+      status,
+    });
+
+    if (!taskId || !status) {
+      return res.status(400).json({ message: "Please fill all fields" });
+    }
     status = status.trim();
 
     //checking status should be approved or rejected
     if (status !== "Approved" && status !== "Rejected") {
       return res.status(400).json({
-        success: true,
+        success: false,
         message: "Invalid status, status should be Approved or Rejected",
       });
     }
@@ -116,12 +124,14 @@ const updateTask = async (req: Request, res: Response) => {
     // find task by id
     const task = await Task.findById(taskId);
     if (!task) {
-      return res.status(400).json({ success: true, message: "Task not found" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Task not found" });
     }
     if (status !== "Completed") {
       return res
         .status(400)
-        .json({ success: true, message: "Task is not completed yet" });
+        .json({ success: false, message: "Task is not completed yet" });
     }
 
     if (task.status === "Completed") {
@@ -170,6 +180,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
+    console.log("userId", userId);
     if (!userId) {
       return res.status(400).json({ message: "Invalid user" });
     }

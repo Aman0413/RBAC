@@ -26,7 +26,7 @@ function AllUser({ name,
         isModalOpen: boolean;
         onClose: () => void;
         option: string | null;
-        operation: () => void;
+        operation: () => void | Promise<void>;
         handleRoleChange: (userId: string) => void;
         deleteOperation: (id: string) => void;
         addTask: () => string;

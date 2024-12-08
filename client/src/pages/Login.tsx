@@ -34,7 +34,7 @@ function Login() {
       window.location.href = '/'
 
     } catch (error) {
-
+      toast.error(error.response?.data.message)
       console.log(error);
 
     }

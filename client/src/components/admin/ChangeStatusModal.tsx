@@ -6,9 +6,9 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { approveTask } from "@/apis/apiservices";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { assignTask } from "@/apis/apiservices";
 import toast from "react-hot-toast";
 
 
@@ -36,7 +36,6 @@ function ChangeStatusModal({ isOpen, onCancel, addTask }: ChangeStatusModalProps
 
     const handleAddTask = async () => {
 
-
         try {
             const userId = addTask();
             const taskData = {
@@ -45,7 +44,7 @@ function ChangeStatusModal({ isOpen, onCancel, addTask }: ChangeStatusModalProps
                 assignedTo: userId,
             };
 
-            const res = await approveTask(localStorage.getItem("token") as string, taskData.title, taskData.description, taskData.assignedTo);
+            const res = await assignTask(localStorage.getItem("token") as string, taskData.title, taskData.description, taskData.assignedTo);
             console.log("Task added successfully:", res);
             if (res.success) {
                 toast.success("Task added successfully");
@@ -58,13 +57,14 @@ function ChangeStatusModal({ isOpen, onCancel, addTask }: ChangeStatusModalProps
     }
 
 
+
     return (
         <div>
             <Dialog open={isOpen} onOpenChange={onCancel}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            Accept the Task?
+                            Assign Task
                         </DialogTitle>
                         <DialogDescription> Are you sure
                             you want to continue?
