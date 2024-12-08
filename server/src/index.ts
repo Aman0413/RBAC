@@ -29,7 +29,7 @@ app.get("/", (req: Request, res: Response) => {
 let URL = process.env.CLIENT_URL;
 app.use(
   cors({
-    origin: ["https://rbac-lake.vercel.app/", "http://localhost:5173"],
+    origin: "*",
     credentials: true,
   })
 );
