@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { handleAxiosError } from '@/utils/handleAxiosError'
 import axios from 'axios'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
@@ -13,6 +14,7 @@ interface RegisterProps {
 
 function Register() {
 
+    const [loading, setLoading] = useState(false)
     const [registerData, setRegisterData] = useState<RegisterProps>({
         name: '',
         email: '',
@@ -25,14 +27,16 @@ function Register() {
         }
 
         try {
+            setLoading(true)
             const res = await axios.post('http://localhost:4000/api/auth/v1/register', registerData)
             if (res.data.success) {
                 toast.success('Register success')
             }
+            setLoading(false)
         } catch (error) {
-            console.log(error);
-            toast.error(error.response?.data.message)
-
+            handleAxiosError(error)
+        } finally {
+            setLoading(false)
         }
 
     }
@@ -68,7 +72,9 @@ function Register() {
 
                             Already have an account? Login
                         </Link></span>
-                    <Button>Register</Button>
+                    <Button>
+                        {loading ? 'Loading...' : 'Register'}
+                    </Button>
 
                 </form>
             </div>

@@ -2,32 +2,39 @@
 import { Button } from '../ui/button'
 import toast from 'react-hot-toast';
 import { markCompleted } from '@/apis/apiservices';
+import { handleAxiosError } from '@/utils/handleAxiosError';
+import Loader from '@/utils/Loader';
+import { useState } from 'react';
 
 
+type taskStatus = "Pending" | "Completed" | "Approved" | "Rejected";
 const taskStatus = {
-    "Pending": "bg-green-500/20 text-green-600",
-    "Completed": "bg-blue-500/20 text-blue-600",
-    "Approved": "bg-green-500/20 text-green-600",
-    "Rejected": "bg-red-500/20 text-red-600"
-}
+    Pending: "bg-green-500/20 text-green-600",
+    Completed: "bg-blue-500/20 text-blue-600",
+    Approved: "bg-green-500/20 text-green-600",
+    Rejected: "bg-red-500/20 text-red-600"
+};
 
 interface TaskCardProps {
     taskid: string;
     title: string;
     description: string;
-    status: string;
+    status: taskStatus
 }
 function TaskCard({ taskid, title, description, status }: TaskCardProps) {
+    const [loading, setLoading] = useState(false);
     const handleMarkAsCompleted = async (taskId: string) => {
         try {
+            setLoading(true);
             const res = await markCompleted(localStorage.getItem('token') as string, taskId);
-
             if (res.success) {
                 toast.success(res.message);
             }
         } catch (error) {
-            console.log(error);
-            toast.error(error.response?.data.message);
+            handleAxiosError(error);
+
+        } finally {
+            setLoading(false);
         }
     }
     return (
@@ -46,7 +53,9 @@ function TaskCard({ taskid, title, description, status }: TaskCardProps) {
                     <Button className='text-sm' onClick={() => {
                         handleMarkAsCompleted(taskid)
                     }}>
-                        Mark as Completeds
+                        {
+                            loading ? <Loader /> : 'Mark as Completed'
+                        }
                     </Button>
                 </div>
                 <div className='text-xs text-gray-500'>Assigned By : Aman</div>

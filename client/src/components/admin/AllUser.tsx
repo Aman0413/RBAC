@@ -1,36 +1,29 @@
 
 import Delete from '@/icons/Delete';
 import Edit from '@/icons/Edit';
-import User from '@/icons/User';
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Modal from './Modal';
-import toast from 'react-hot-toast';
+
 import Plus from '@/icons/Plus';
 import ChangeStatusModal from './ChangeStatusModal';
 
+interface AllUserProps {
+    name: string;
+    role: string;
+    id: string;
+    email: string;
+    edit: () => void;
+    delete: () => void;
+    isModalOpen: boolean;
+    onClose: () => void;
+    option: string | null;
+    operation?: () => void | Promise<void>;
+    handleRoleChange: (userId: string) => void;
+    deleteOperation: (id: string) => void;
+    addTask: () => string;
+}
 
-function AllUser({ name,
-    role,
-    id,
-    email,
-    edit,
-    delete: deleteUser,
-    isModalOpen,
-    onClose, option, operation, handleRoleChange, deleteOperation, addTask }: {
-        name: string;
-        role: string;
-        id: string;
-        email: string;
-        edit: () => void;
-        delete: () => void;
-        isModalOpen: boolean;
-        onClose: () => void;
-        option: string | null;
-        operation: () => void | Promise<void>;
-        handleRoleChange: (userId: string) => void;
-        deleteOperation: (id: string) => void;
-        addTask: () => string;
-    }) {
+function AllUser({ name, role, id, email, edit, delete: deleteUser, isModalOpen, onClose, option, handleRoleChange, deleteOperation, addTask }: AllUserProps) {
 
     const [isChangeStatusModalOpen, setChangeStatusModalOpen] = useState(false);
 
@@ -43,13 +36,15 @@ function AllUser({ name,
             <Modal
                 userId={id}
                 isOpen={isModalOpen}
-                title={option == 'edit' ? 'Edit User' : 'Delete User'}
-                description={option == 'edit' ? 'Edit user details.' : 'Are you sure you want to delete this user?'}
+                title={option === 'edit' ? 'Edit User' : 'Delete User'}
+                description={option === 'edit' ? 'Edit user details.' : 'Are you sure you want to delete this user?'}
                 onConfirm={option === 'edit' ? edit : deleteUser}
                 onCancel={onClose}
                 confirmText={option === 'edit' ? 'Save' : 'Delete'}
                 cancelText="Cancel"
-                operation={option === 'edit' ? handleRoleChange : deleteOperation}
+                operation={option === 'edit'
+                    ? () => handleRoleChange(id)
+                    : () => deleteOperation(id)}
             />
 
             <ChangeStatusModal

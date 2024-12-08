@@ -5,8 +5,8 @@ type TaskProps = {
     task: string;
     assignedTo: string;
     status: string;
-    email: string;
-    date: string;
+    email?: string;
+    date?: string;
     isOpen: boolean;
     onCancel: () => void;
     handleUpdateStatusModal: () => void;
@@ -60,7 +60,7 @@ function GetAllTask({ task, assignedTo, status, email, date, isOpen, onCancel, h
                                 <div className="flex items-center gap-3">
                                     <div className="flex flex-col">
                                         <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{task}</p>
-                                        <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-70">{formatMongoDate(date)}</p>
+                                        <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-70"> {date ? formatMongoDate(date) : 'No Date Available'}</p>
                                     </div>
                                 </div>
                             </td>

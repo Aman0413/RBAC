@@ -1,15 +1,19 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { handleAxiosError } from '@/utils/handleAxiosError'
+import Loader from '@/utils/Loader'
 import axios from 'axios'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
+
 
 interface LoginProps {
   email: string,
   password: string
 }
 function Login() {
+  const [loading, setLoading] = useState(false)
   const [loginData, setLoginData] = useState<LoginProps>({
     email: '',
     password: ''
@@ -19,6 +23,7 @@ function Login() {
     if (loginData.email === '' || loginData.password === '') {
       toast.error('Please fill all the fields')
     }
+    setLoading(true)
     try {
       const res = await axios.post('http://localhost:4000/api/auth/v1/login', loginData, {
         withCredentials: true
@@ -26,6 +31,7 @@ function Login() {
       console.log(res.data);
       if (res.data.success) {
         toast.success('Login success')
+        setLoading(false)
 
       }
       // Save token to local storage
@@ -34,9 +40,10 @@ function Login() {
       window.location.href = '/'
 
     } catch (error) {
-      toast.error(error.response?.data.message)
-      console.log(error);
+      handleAxiosError(error);
 
+    } finally {
+      setLoading(false)
     }
   }
   return (
@@ -66,7 +73,14 @@ function Login() {
 
               Do not have an account? Register
             </Link></span>
-          <Button>Login</Button>
+          <Button disabled={loading}>
+
+            {
+              loading ? <Loader /> : ' Login'
+            }
+
+
+          </Button>
 
         </form>
       </div>

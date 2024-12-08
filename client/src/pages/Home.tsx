@@ -4,17 +4,22 @@ import GetAllTask from '@/components/admin/GetAllTask';
 import { Button } from '@/components/ui/button';
 import TaskCard from '@/components/user/TaskCard';
 import { UserDataContext } from '@/context/UserContext';
+import { Task, User } from '@/types/types';
+import { handleAxiosError } from '@/utils/handleAxiosError';
+import Loader from '@/utils/Loader';
+
 import { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 function Home() {
   const { user, setUser } = useContext(UserDataContext);
+  const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [userTasks, setUserTasks] = useState([]);
   const [allusers, setAllUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'edit' | 'delete'>('edit'); // Track modal type
-  const [selectedUser, setSelectedUser] = useState(null); // Track the user being edited/deleted
+
 
   const [updateStatusModal, setUpdateStatusModal] = useState(false);
 
@@ -26,38 +31,49 @@ function Home() {
   const getAllUserTasks = async () => {
     try {
 
+      setLoading(true);
       const res = await fetchAllTasksFunc(localStorage.getItem('token') as string);
       setUserTasks(res.tasks);
+      console.log("User Tasks:", res.tasks);
     } catch (error) {
-      toast.error(error.response?.data.message);
-      console.log(error);
+      handleAxiosError(error);
+    } finally {
+      setLoading(false);
     }
   }
 
-  const handleOpenModal = (type: 'edit' | 'delete', user: any) => {
-    setModalType(type);
-    setSelectedUser(user);
+  const handleOpenModal = (type: string) => {
+    if (type === 'edit') {
+
+      setModalType(type);
+    } else if (type === 'delete') {
+      setModalType(type);
+    }
+
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedUser(null);
+
   };
 
   const getUser = async () => {
     try {
+      setLoading(true);
       const res = await getUserProfile(localStorage.getItem('token') as string);
       console.log("User:", res.user);
       setUser(res.user);
     } catch (error) {
-      toast.error(error.response?.data.message);
-      console.log(error);
+      handleAxiosError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const logout = async () => {
     try {
+      setLoading(true);
       const res = await logoutUser(localStorage.getItem('token') as string);
       if (res.success) {
         localStorage.removeItem('token');
@@ -65,48 +81,61 @@ function Home() {
         window.location.href = '/login';
       }
     } catch (error) {
-      console.log(error);
+      handleAxiosError(error);
+
+    } finally {
+      setLoading(false);
     }
   };
 
   const getAllUserFunc = async () => {
     try {
+      setLoading(true);
       const res = await getAllUsers(localStorage.getItem('token') as string);
       setAllUsers(res.users);
+
     } catch (error) {
-      toast.error(error.response?.data.message);
-      console.log(error);
+      handleAxiosError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const getTasks = async () => {
     try {
+      setLoading(true);
       const res = await getAllTasks(localStorage.getItem('token') as string);
       console.log('Tasks:', res.tasks);
       if (res.success) {
         setTasks(res.tasks);
       }
+
     } catch (error) {
-      toast.error(error.response?.data.message);
-      console.log(error);
+      handleAxiosError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleRoleChange = async (userId: string) => {
     try {
+      setLoading(true);
       const res = await changeRole(localStorage.getItem('token') as string, userId,);
       if (res.success) {
         toast.success('Role changed successfully');
         getAllUserFunc();
       }
+
     } catch (error) {
-      toast.error(error.response?.data.message);
-      console.log(error);
+      handleAxiosError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const deleteOperation = async (userId: string) => {
     try {
+      setLoading(true);
       const res = await deleteUserAdmin(localStorage.getItem('token') as string, userId,);
       if (res.success) {
         toast.success('User deleted successfully');
@@ -114,14 +143,16 @@ function Home() {
 
       }
     } catch (error) {
-      toast.error(error.response?.data.message);
-      console.log(error);
+      handleAxiosError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const approveorRejectTask = async (taskId: string, status: string) => {
     try {
 
+      setLoading(true);
       const res = await approveTask(localStorage.getItem('token') as string, taskId, status);
       if (res.success) {
         toast.success('Task updated successfully');
@@ -129,9 +160,11 @@ function Home() {
 
         setUpdateStatusModal(false);
       }
+
     } catch (error) {
-      console.log("Error approving or rejecting task:", error);
-      toast.error(error.response?.data.message);
+      handleAxiosError(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -145,15 +178,15 @@ function Home() {
 
 
 
-  // useEffect(() => {
 
-  //   getAllUserTasks();
-  // }, [userTasks]);
 
   return (
     <div className='p-4'>
-      <Button onClick={logout}>Logout</Button>
 
+      <Button onClick={logout}>Logout</Button>
+      {
+        loading && <Loader />
+      }
       {
         user && user.role === 'admin' ? <>
           <div className='flex flex-col space-x-4 w-full space-y-6'>
@@ -161,14 +194,14 @@ function Home() {
               <div className='mt-5 bg-white p-4 rounded-md font-bold'>
                 <h2>Tasks</h2>
                 {tasks &&
-                  tasks.map((task: any, index: number) => (
+                  tasks.map((task: Task,) => (
 
                     <GetAllTask
                       key={task._id}
                       task={task.title}
                       assignedTo={task.assignedTo?.name}
                       status={task.status}
-                      email={task.email}
+                      // email={task.email}
                       date={task.createdAt}
                       isOpen={updateStatusModal}
                       onCancel={() => setUpdateStatusModal(false)}
@@ -185,15 +218,15 @@ function Home() {
               <div className='mt-5 bg-white p-4 rounded-md font-bold'>
                 <h2>All Users</h2>
                 {allusers &&
-                  allusers.map((user: any, index: number) => (
+                  allusers.map((user: User, index: number) => (
                     <AllUser
                       key={index}
                       name={user.name}
                       role={user.role}
                       id={user._id}
                       email={user.email}
-                      edit={() => handleOpenModal('edit', user)}
-                      delete={() => handleOpenModal('delete', user)}
+                      edit={() => handleOpenModal('edit')}
+                      delete={() => handleOpenModal('delete')}
                       isModalOpen={isModalOpen}
                       onClose={handleCloseModal}
                       option={modalType}
@@ -207,7 +240,7 @@ function Home() {
           </div></> : <>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
             {
-              userTasks && userTasks.map((task: any, index: number) => (
+              userTasks && userTasks.map((task: Task, index: number) => (
                 <TaskCard key={index} taskid={task._id} title={task.title} description={task.description} status={task.status} />
               ))
             }

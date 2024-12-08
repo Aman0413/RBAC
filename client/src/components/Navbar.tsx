@@ -4,15 +4,14 @@ import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 
+
+
 function Navbar() {
     const { user } = useContext(UserDataContext);
-
-
 
     return (
         <div className=' p-4 shadow-md flex justify-between'>
             <h2 className='font-bold text-xl'>RBAC</h2>
-
             <div className=' flex justify-center items-center'>
                 <div>
 

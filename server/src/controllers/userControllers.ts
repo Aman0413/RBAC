@@ -25,7 +25,7 @@ const fetchAllTasks = async (req: Request, res: Response) => {
     const tasks = await Task.find({
       //@ts-ignore
       assignedTo: req.user.id, // Filter by `assignedTo`
-    });
+    }).populate("assignedTo");
     return res.status(200).json({ success: true, tasks });
   } catch (error) {
     console.error("Error fetching tasks:", error);

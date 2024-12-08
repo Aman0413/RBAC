@@ -7,8 +7,6 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 
-
-
 interface ModalProps {
     userId: string;
     isOpen: boolean;
@@ -24,11 +22,9 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({
-    userId,
     isOpen,
     title,
     description,
-    onConfirm,
     onCancel,
     confirmText = "Confirm",
     cancelText = "Cancel",
