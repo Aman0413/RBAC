@@ -27,12 +27,13 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 let URL = process.env.CLIENT_URL;
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: "https://rbac-lake.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 app.use("/api/auth/v1", authRoutes);
 app.use("/api/user/v1", userRoutes);
