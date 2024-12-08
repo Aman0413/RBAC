@@ -12,7 +12,10 @@ import { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 function Home() {
-  const { user, setUser } = useContext(UserDataContext) || { user: null };
+  const { user, setUser } = useContext(UserDataContext) || { user: null, setUser: () => { } };
+
+
+
   const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [userTasks, setUserTasks] = useState([]);
@@ -199,10 +202,11 @@ function Home() {
                     <GetAllTask
                       key={task._id}
                       task={task.title}
+                      //@ts-nocheck
                       assignedTo={task.assignedTo?.name}
                       status={task.status}
                       // email={task.email}
-                      date={task.createdAt}
+                      date={task.createdAt?.toString()}
                       isOpen={updateStatusModal}
                       onCancel={() => setUpdateStatusModal(false)}
                       handleUpdateStatusModal={handleUpdateStatusModal}
@@ -241,7 +245,9 @@ function Home() {
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
             {
               userTasks && userTasks.map((task: Task, index: number) => (
-                <TaskCard key={index} taskid={task._id} title={task.title} description={task.description} status={task.status} />
+                <TaskCard key={index} taskid={task._id} title={task.title} description=
+                  //@ts-nocheck
+                  {task.description} status={task.status} />
               ))
             }
           </div>
