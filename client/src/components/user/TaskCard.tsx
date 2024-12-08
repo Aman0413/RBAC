@@ -8,24 +8,24 @@ import { useState } from 'react';
 
 
 
+
 // Renamed type to TaskStatusType
-
-
-const taskStatusColors = {
-    Pending: "bg-green-500/20 text-green-600",
-    Completed: "bg-blue-500/20 text-blue-600",
-    Approved: "bg-green-500/20 text-green-600",
-    Rejected: "bg-red-500/20 text-red-600"
-};
+// const taskStatusColors = {
+//     Pending: `bg-green-500/20 text-green-600`,
+//     Completed: "bg-blue-500/20 text-blue-600",
+//     Approved: "bg-green-500/20 text-green-600",
+//     Rejected: "bg-red-500/20 text-red-600"
+// };
 
 interface TaskCardProps {
     taskid: string;
     title: string;
     description: string;
-    status: string;
+    status: string
 }
 function TaskCard({ taskid, title, description, status }: TaskCardProps) {
     const [loading, setLoading] = useState(false);
+
     const handleMarkAsCompleted = async (taskId: string) => {
         try {
             setLoading(true);
@@ -48,8 +48,10 @@ function TaskCard({ taskid, title, description, status }: TaskCardProps) {
                 <p className='text-gray-500'>{description}</p>
                 <div className='flex justify-between space-x-16'>
 
-                    <div className={`relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none ${taskStatusColors[status]
-                        } py-1 px-2 text-xs rounded-md`} style={{ opacity: 1 }}>
+                    <div className={`relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none 
+
+                   bg-green-500/20 text-green-600
+                        py-1 px-2 text-xs rounded-md`} style={{ opacity: 1 }}>
                         <span className="">{status}</span>
                     </div>
 

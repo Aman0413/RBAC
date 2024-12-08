@@ -201,7 +201,7 @@ function Home() {
                       key={task._id}
                       task={task.title}
 
-                      assignedTo={task.assignedTo.name}
+                      // assignedTo={task.assignedTo.name}
                       status={task.status}
                       // email={task.email}
                       date={task.createdAt?.toString()}
@@ -242,6 +242,7 @@ function Home() {
           </div></> : <>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
             {
+              user?.role === 'user' &&
               userTasks && userTasks.map((task: Task, index: number) => (
                 <TaskCard key={index} taskid={task._id} title={task.title} description=
 

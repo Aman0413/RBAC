@@ -4,7 +4,7 @@ import UpdateStatusModal from './UpdateStatusModal';
 
 type TaskProps = {
     task: string;
-    assignedTo: { name: string, email: string };
+    assignedTo?: { name: string, email: string };
     status: string;
     email?: string;
     date?: string;
@@ -17,7 +17,7 @@ type TaskProps = {
 };
 
 
-function GetAllTask({ task, assignedTo, status, email, date, isOpen, onCancel, handleUpdateStatusModal, onApprove, onReject, }: TaskProps) {
+function GetAllTask({ task, status, email, date, isOpen, onCancel, handleUpdateStatusModal, onApprove, onReject, }: TaskProps) {
 
 
 
@@ -69,7 +69,7 @@ function GetAllTask({ task, assignedTo, status, email, date, isOpen, onCancel, h
                                 <div className="flex items-center gap-3">
                                     <img src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg" alt="John Michael" className="inline-block relative object-cover object-center !rounded-full w-9 h-9 rounded-md" />
                                     <div className="flex flex-col">
-                                        <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{assignedTo.name}</p>
+                                        {/* <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{assignedTo.name}</p> */}
                                         <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-70">{email}</p>
                                     </div>
                                 </div>
