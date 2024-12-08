@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     Dialog,
     DialogContent,
@@ -6,8 +6,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { changeRole } from "@/apis/apiservices";
-import toast from "react-hot-toast";
+
 
 
 interface ModalProps {

@@ -1,8 +1,8 @@
 import { UserDataContext } from '@/context/UserContext';
 import User from '@/icons/User';
-import React, { useContext } from 'react'
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
 
 function Navbar() {
     const { user } = useContext(UserDataContext);
