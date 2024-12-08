@@ -33,7 +33,7 @@ function AllUser({ name, role, id, email, edit, delete: deleteUser, isModalOpen,
         setChangeStatusModalOpen(!isChangeStatusModalOpen);
     };
 
-   
+
     return (
         <div>
             <Modal
@@ -124,6 +124,12 @@ function AllUser({ name, role, id, email, edit, delete: deleteUser, isModalOpen,
 
                     </tbody>
                 </table>
+            </div>
+
+
+            {/* remove */}
+            <div>
+                a
             </div>
 
         </div>
