@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:4000/api"; // Base URL
+const API_URL = import.meta.env.VITE_API_URL; // Base URL
 
 // Get User Profile
 export const getUserProfile = async (token: string) => {
@@ -173,6 +173,7 @@ export const markCompleted = async (token: string, taskId: string) => {
 };
 
 // get all tasks
+
 export const fetchAllTasksFunc = async (token: string) => {
   try {
     const res = await axios.get(`${API_URL}/user/v1/alltasks`, {

@@ -5,7 +5,6 @@ import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import cors from "cors";
-
 dotenv.config();
 
 const PORT: number = parseInt(process.env.PORT as string) || 4000;
@@ -26,9 +25,10 @@ app.get("/", (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+let URL = process.env.CLIENT_URL;
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: ["http://localhost:5173", "http://localhost:5174", process.env.URL],
     credentials: true,
   })
 );
