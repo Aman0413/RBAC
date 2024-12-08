@@ -127,10 +127,7 @@ function AllUser({ name, role, id, email, edit, delete: deleteUser, isModalOpen,
             </div>
 
 
-            {/* remove */}
-            <div>
-                a
-            </div>
+
 
         </div>
     )
