@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
-
+const API_URL = import.meta.env.VITE_API_URL;
 interface RegisterProps {
     name: string,
     email: string,
@@ -28,7 +28,7 @@ function Register() {
 
         try {
             setLoading(true)
-            const res = await axios.post('http://localhost:4000/api/auth/v1/register', registerData)
+            const res = await axios.post(`${API_URL}/auth/v1/register`, registerData)
             if (res.data.success) {
                 toast.success('Register success')
             }
