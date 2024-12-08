@@ -17,5 +17,5 @@ export interface Task {
   status: "Pending" | "Completed" | "" | "Approved" | "Rejected";
   createdAt?: string | Date;
   createdBy?: string;
-  assignedTo?: User | string;
+  assignedTo: User | string;
 }

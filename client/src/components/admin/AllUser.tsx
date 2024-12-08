@@ -7,6 +7,7 @@ import Modal from './Modal';
 import Plus from '@/icons/Plus';
 import ChangeStatusModal from './ChangeStatusModal';
 
+
 interface AllUserProps {
     name: string;
     role: string;
@@ -21,6 +22,7 @@ interface AllUserProps {
     handleRoleChange: (userId: string) => void;
     deleteOperation: (id: string) => void;
     addTask: () => string;
+
 }
 
 function AllUser({ name, role, id, email, edit, delete: deleteUser, isModalOpen, onClose, option, handleRoleChange, deleteOperation, addTask }: AllUserProps) {
@@ -31,6 +33,7 @@ function AllUser({ name, role, id, email, edit, delete: deleteUser, isModalOpen,
         setChangeStatusModalOpen(!isChangeStatusModalOpen);
     };
 
+   
     return (
         <div>
             <Modal
@@ -40,11 +43,12 @@ function AllUser({ name, role, id, email, edit, delete: deleteUser, isModalOpen,
                 description={option === 'edit' ? 'Edit user details.' : 'Are you sure you want to delete this user?'}
                 onConfirm={option === 'edit' ? edit : deleteUser}
                 onCancel={onClose}
-                confirmText={option === 'edit' ? 'Save' : 'Delete'}
+                confirmText={option === 'edit' ? (role === 'user' ? 'Make Admin' : 'Make User') : 'Confirm'}
                 cancelText="Cancel"
                 operation={option === 'edit'
                     ? () => handleRoleChange(id)
                     : () => deleteOperation(id)}
+                role={role}
             />
 
             <ChangeStatusModal

@@ -7,6 +7,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 
+
 interface ModalProps {
     userId: string;
     isOpen: boolean;
@@ -17,6 +18,8 @@ interface ModalProps {
     confirmText?: string;
     cancelText?: string;
     operation: () => void | Promise<void>;
+    role: string;
+
 
 
 }
@@ -28,8 +31,10 @@ const Modal: React.FC<ModalProps> = ({
     onCancel,
     confirmText = "Confirm",
     cancelText = "Cancel",
-    operation
+    operation,
+    role
 }) => {
+
 
 
 
@@ -42,8 +47,11 @@ const Modal: React.FC<ModalProps> = ({
 
                         <div className="w-full my-4">
                             <div className="flex flex-col justify-center space-y-1 my-2">
-                                <span>Aman Verma</span>
-                                <span>Current Role:</span>
+
+                                <span >Current Role:<span className="uppercase font-bold">
+                                    {" " + role}
+                                </span></span>
+
                             </div>
                         </div>
                     </DialogDescription>

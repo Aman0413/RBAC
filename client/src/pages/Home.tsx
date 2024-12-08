@@ -14,8 +14,6 @@ import toast from 'react-hot-toast';
 function Home() {
   const { user, setUser } = useContext(UserDataContext) || { user: null, setUser: () => { } };
 
-
-
   const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [userTasks, setUserTasks] = useState<Task[]>([]);
@@ -195,14 +193,14 @@ function Home() {
           <div className='flex flex-col space-x-4 w-full space-y-6'>
             <div className='bg-red-100 w-full rounded-2xl p-3 shadow-sm'>
               <div className='mt-5 bg-white p-4 rounded-md font-bold'>
-                <h2>Tasks</h2>
+                <h2>All Tasks</h2>
                 {tasks &&
                   tasks.map((task: Task,) => (
 
                     <GetAllTask
                       key={task._id}
                       task={task.title}
-                      //@ts-expect-error
+
                       assignedTo={task.assignedTo.name}
                       status={task.status}
                       // email={task.email}
@@ -246,7 +244,7 @@ function Home() {
             {
               userTasks && userTasks.map((task: Task, index: number) => (
                 <TaskCard key={index} taskid={task._id} title={task.title} description=
-                  //@ts-expect-error
+
                   {task.description} status={task.status} />
               ))
             }

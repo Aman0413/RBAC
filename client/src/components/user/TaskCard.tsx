@@ -7,7 +7,7 @@ import Loader from '@/utils/Loader';
 import { useState } from 'react';
 
 
-type TaskStatusType = "Pending" | "Completed" | "Approved" | "Rejected";
+
 // Renamed type to TaskStatusType
 
 
@@ -22,7 +22,7 @@ interface TaskCardProps {
     taskid: string;
     title: string;
     description: string;
-    status: TaskStatusType;  // Using the renamed type here
+    status: string;
 }
 function TaskCard({ taskid, title, description, status }: TaskCardProps) {
     const [loading, setLoading] = useState(false);
