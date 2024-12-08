@@ -25,10 +25,11 @@ app.get("/", (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 let URL = process.env.CLIENT_URL;
 app.use(
   cors({
-    origin: ["https://rbac-lake.vercel.app/"],
+    origin: ["https://rbac-lake.vercel.app/", "http://localhost:5173"],
     credentials: true,
   })
 );
