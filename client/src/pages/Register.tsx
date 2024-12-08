@@ -78,6 +78,10 @@ function Register() {
 
                 </form>
             </div>
+
+            <div>
+                checking
+            </div>
         </div>
     )
 }
